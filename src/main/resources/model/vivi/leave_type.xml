@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select
+                    vlt.*
+                from v_leave_type vlt
+                #WHERE_CLAUSE#
+                order by id desc 
+            ]]>
+        </sql>
+        <filter name="type_name" express="type_name like concat('%',${@type_name},'%')"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="queryAllLeaveType">
+        <sql>
+            <![CDATA[
+                SELECT
+                id as code, type_name as name
+                FROM v_leave_type ORDER BY id
+             ]]>
+        </sql>
+    </query>
+
+    <execute name="add">
+        <param name="id" dataType="number"/>
+        <param name="type_name" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_leave_type
+                (
+                type_name,
+                createtime,
+                updatetime
+                )
+                VALUES
+                (
+                ${@type_name},
+                NOW(),
+                NOW()
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="update">
+        <param name="id" dataType="number"/>
+        <param name="type_name" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE v_leave_type SET
+                type_name=${@type_name},
+                updatetime=NOW()
+                WHERE id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM v_leave_type where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

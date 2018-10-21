@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select *
+                from v_start
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="start_name" express="start_name like concat('%',${@start_name},'%')"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="queryD">
+        <sql>
+            <![CDATA[
+                select *
+                from v_start
+                #WHERE_CLAUSE#
+                order by id asc
+            ]]>
+        </sql>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="queryAllStart">
+        <sql>
+            <![CDATA[
+                SELECT
+                id as code, start_name as name
+                FROM v_start ORDER BY id
+             ]]>
+        </sql>
+    </query>
+
+    <execute name="add">
+        <param name="id" dataType="number"/>
+        <param name="start_name" dataType="varchar"/>
+        <param name="start_count" dataType="number"/>
+        <param name="money" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_start
+                (
+                start_name,
+                start_count,
+                money
+                )
+                VALUES
+                (
+                ${@start_name},
+                ${@start_count},
+                ${@money}
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="update">
+        <param name="id" dataType="number"/>
+        <param name="start_name" dataType="varchar"/>
+        <param name="start_count" dataType="number"/>
+        <param name="money" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE v_start SET
+                start_name=${@start_name},
+                start_count=${@start_count},
+                money=${@money}
+                WHERE id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM v_start where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

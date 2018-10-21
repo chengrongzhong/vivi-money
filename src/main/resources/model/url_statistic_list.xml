@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from qiye_url_statistics
+                #WHERE_CLAUSE#
+                order by id desc 
+            ]]>
+        </sql>
+        <filter name="id" express="id = ${@id}"/>
+        <filter name="sta_type" express="sta_type = ${@sta_type}"/>
+    </query>
+
+    <execute name="type">
+        <param name="customerUuid" dataType="varchar" />
+        <param name="url" dataType="varchar" />
+        <param name="type" dataType="number" />
+        <sqls>
+            <executeSql>
+                <![CDATA[
+               INSERT INTO qiye_url_statistics
+               (url,
+                sta_type,
+                purchase_uuid,
+                remark,
+                create_time
+                )
+              VALUES
+              (${@url},
+               ${@type},
+               ${@customerUuid},
+               'purchase_uuid -> customerUuid',
+               NOW()
+                )
+              ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+</model>

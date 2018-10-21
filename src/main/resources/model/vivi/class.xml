@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from v_class
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="class_name" express="class_name like concat('%',${@class_name},'%')"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="queryD">
+        <sql>
+            <![CDATA[
+                select *
+                from v_class
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="main_teacher_id" express="main_teacher_id like concat('%',${@main_teacher_id},'%')"/>
+        <filter name="vice_teacher_id" express="vice_teacher_id like concat('%',${@vice_teacher_id},'%')"/>
+        <filter name="life_teacher_id" express="life_teacher_id like concat('%',${@life_teacher_id},'%')"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="queryAllClass">
+        <sql>
+            <![CDATA[
+                SELECT
+                id as code, class_name as name
+                FROM v_class ORDER BY id
+             ]]>
+        </sql>
+    </query>
+
+    <execute name="add">
+        <param name="id" dataType="number"/>
+        <param name="class_name" dataType="varchar"/>
+        <param name="main_teacher_id" dataType="varchar"/>
+        <param name="vice_teacher_id" dataType="varchar"/>
+        <param name="life_teacher_id" dataType="varchar"/>
+
+        <param name="main_get" dataType="number"/>
+        <param name="vice_get" dataType="number"/>
+        <param name="life_get" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_class
+                (
+                class_name,
+                main_teacher_id,
+                vice_teacher_id,
+                life_teacher_id,
+                main_get,
+                vice_get,
+                life_get,
+                createtime,
+                updatetime
+                )
+                VALUES
+                (
+                ${@class_name},
+                ${@main_teacher_id},
+                ${@vice_teacher_id},
+                ${@life_teacher_id},
+                ${@main_get},
+                ${@vice_get},
+                ${@life_get},
+                NOW(),
+                NOW()
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="update">
+        <param name="id" dataType="number"/>
+        <param name="class_name" dataType="varchar"/>
+        <param name="main_teacher_id" dataType="varchar"/>
+        <param name="vice_teacher_id" dataType="varchar"/>
+        <param name="life_teacher_id" dataType="varchar"/>
+
+        <param name="main_get" dataType="number"/>
+        <param name="vice_get" dataType="number"/>
+        <param name="life_get" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE v_class SET
+                class_name=${@class_name},
+                main_teacher_id=${@main_teacher_id},
+                vice_teacher_id=${@vice_teacher_id},
+                life_teacher_id=${@life_teacher_id},
+                main_get=${@main_get},
+                vice_get=${@vice_get},
+                life_get=${@life_get},
+                updatetime=NOW()
+                WHERE id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM v_class where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

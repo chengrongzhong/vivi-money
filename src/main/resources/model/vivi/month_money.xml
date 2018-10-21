@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from v_month_money
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="queryAllMonthMoney">
+        <sql>
+            <![CDATA[
+                select *
+                from v_month_money
+                #WHERE_CLAUSE#
+                order by createtime desc
+            ]]>
+        </sql>
+    </query>
+
+    <execute name="add">
+        <param name="name" dataType="varchar"/>
+        <param name="descript" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_month_money
+                (
+                name,
+                descript,
+                createtime,
+                updatetime
+                )
+                VALUES
+                (
+                ${@name},
+                ${@descript},
+                NOW(),
+                NOW()
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM v_month_money where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

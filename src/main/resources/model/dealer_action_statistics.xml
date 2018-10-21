@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query name="query">
+        <sql>
+            <![CDATA[
+                SELECT qdc.customerno, qdc.customername, qdc.branchcompanyname, qus.purchase_uuid,
+                qdc.orgname, qdc.salesmanname, qus.sta_type, qdu.loginname, COUNT(qus.id) AS actcount 
+                FROM qiye_url_statistics qus, qiye_dealer_customer qdc, qiye_dealer_user qdu 
+                WHERE sta_type > 10 AND qdc.uuid=qus.purchase_uuid AND qdu.uuid = qdc.channeluseruuid
+                #AND_CLAUSE#
+                GROUP BY qus.purchase_uuid
+            ]]>
+        </sql>
+        <filter name="loginname" express="qdu.loginname like concat('%',${@loginname},'%')"/>
+        <filter name="salesmanname" express="qdc.salesmanname like concat('%',${@salesmanname},'%')"/>
+        <filter name="customername" express="qdc.customername like concat('%',${@customername},'%')"/>
+
+        <filter name="timefrom" express="qus.create_time &gt;= ${@timefrom}" />
+        <filter name="timeto" express="qus.create_time &lt;= ${@timeto}" />
+    </query>
+
+    <query name="countdays">
+        <sql>
+            <![CDATA[
+                SELECT * FROM qiye_url_statistics 
+                WHERE sta_type > 10
+                #AND_CLAUSE#
+                GROUP BY TO_DAYS(create_time)
+            ]]>
+        </sql>
+        <filter name="purchase_uuid" express="purchase_uuid = ${@purchase_uuid}"/>
+    </query>
+
+</model>

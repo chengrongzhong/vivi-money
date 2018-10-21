@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbfound-mvc xmlns="http://dbfound.googlecode.com/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dbfound.googlecode.com/mvc http://dbfound.googlecode.com/svn/tags/v2/mvc.xsd">
+
+	<devMode value="true" />
+
+    <action name="action/loginAction" class="com.kuyu.action.loginAction" />
+    <action name="action/dealerActionStatistics" class="com.kuyu.action.DealerActionStatistics" />
+    <action name="sys/role" class="com.kuyu.sys.RoleControl" />
+    <action name="action/viviMoneyGen" class="com.kuyu.action.ViviMoneyGen" />
+
+</dbfound-mvc>

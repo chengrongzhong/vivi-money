@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query>
+        <sql>
+            <![CDATA[
+                SELECT qdo.order_id, qdo.purchase_time,qdc.branchcompanyname, qdc.orgname, qdc.customername,
+                (SELECT COUNT(id) FROM qiye_url_statistics WHERE sta_type = 1 AND purchase_uuid = qdo.purchase_uuid) AS ordercount,
+                (SELECT COUNT(id) FROM qiye_url_statistics WHERE sta_type = 2 AND purchase_uuid = qdo.purchase_uuid) AS tracecount,
+                (SELECT COUNT(id) FROM qiye_url_statistics WHERE sta_type = 3 AND purchase_uuid = qdo.purchase_uuid) AS signcount,
+                (SELECT COUNT(id) FROM qiye_url_statistics WHERE sta_type = 4 AND purchase_uuid = qdo.purchase_uuid) AS redcount,
+                 qdc.salesmanname, qdu.loginname, (SELECT COUNT(userid) FROM qiye_dealer_user WHERE parentuuid = qdu.uuid) AS childnum 
+                FROM qiye_dealer_customer qdc,qiye_dealer_user qdu,qiye_dealer_order qdo  
+                WHERE qdu.uuid = qdc.channeluseruuid 
+                AND qdo.user_id = qdu.uuid 
+                AND qdo.confirm_status = 10
+                #AND_CLAUSE#
+                order by qdo.purchase_time desc
+            ]]>
+        </sql>
+        <filter name="loginname" express="qdu.loginname like concat('%',${@loginname},'%')"/>
+        <filter name="salesmanname" express="qdc.salesmanname like concat('%',${@salesmanname},'%')"/>
+        <filter name="customername" express="qdc.customername like concat('%',${@customername},'%')"/>
+        <filter name="timefrom" express="qdo.purchase_time &gt;= ${@timefrom}" />
+        <filter name="timeto" express="qdo.purchase_time &lt;= ${@timeto}" />
+    </query>
+
+</model>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from v_teacher
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="teacher_name" express="teacher_name like concat('%',${@teacher_name},'%')"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="queryD">
+        <sql>
+            <![CDATA[
+                select *
+                from v_teacher
+                #WHERE_CLAUSE#
+                order by id asc
+            ]]>
+        </sql>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="queryAllTeacher">
+        <sql>
+            <![CDATA[
+                SELECT
+                id as code, teacher_name as name
+                FROM v_teacher ORDER BY id
+             ]]>
+        </sql>
+    </query>
+
+    <execute name="add">
+        <param name="id" dataType="number"/>
+        <param name="teacher_name" dataType="varchar"/>
+        <param name="birth" dataType="varchar"/>
+        <param name="join_time" dataType="varchar"/>
+        <param name="duty_id" dataType="number"/>
+        <param name="start_id" dataType="number"/>
+        <param name="shebao" dataType="number"/>
+        <param name="jiaotong" dataType="number"/>
+        <param name="class_id" dataType="number"/>
+        <param name="other" dataType="number"/>
+        <param name="sushe" dataType="number"/>
+        <param name="company_money" dataType="number"/>
+
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_teacher
+                (
+                teacher_name,
+                birth,
+                join_time,
+                duty_id,
+                start_id,
+                shebao,
+                jiaotong,
+                class_id,
+                other,
+                sushe,
+                company_money
+                )
+                VALUES
+                (
+                ${@teacher_name},
+                ${@birth},
+                ${@join_time},
+                ${@duty_id},
+                ${@start_id},
+                ${@shebao},
+                ${@jiaotong},
+                ${@class_id},
+                ${@other},
+                ${@sushe},
+                ${@company_money}
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="update">
+        <param name="id" dataType="number"/>
+        <param name="teacher_name" dataType="varchar"/>
+        <param name="birth" dataType="varchar"/>
+        <param name="join_time" dataType="varchar"/>
+        <param name="duty_id" dataType="number"/>
+        <param name="start_id" dataType="number"/>
+        <param name="shebao" dataType="number"/>
+        <param name="jiaotong" dataType="number"/>
+        <param name="class_id" dataType="number"/>
+        <param name="other" dataType="number"/>
+        <param name="company_money" dataType="number"/>
+        <param name="sushe" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE v_teacher SET
+                teacher_name=${@teacher_name},
+                birth=${@birth},
+                join_time=${@join_time},
+                duty_id=${@duty_id},
+                start_id=${@start_id},
+                shebao=${@shebao},
+                jiaotong=${@jiaotong},
+                class_id=${@class_id},
+                other=${@other},
+                sushe=${@sushe},
+                company_money=${@company_money}
+                WHERE id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM v_teacher where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

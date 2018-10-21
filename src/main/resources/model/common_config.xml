@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+	    
+    <param name="NOW_LOGIN_USER_NAME" dataType="varchar" sourcePath="session.LOGIN_USER_NAME"/>
+    
+	<query>
+		<sql>
+		 <![CDATA[
+			SELECT * FROM common_config 
+			#WHERE_CLAUSE#
+			order by id desc
+		 ]]>
+		</sql>
+		<filter name="id" express="id = ${@id}"/>
+		<filter name="ckey" express="ckey like concat('%',${@ckey},'%')"/>
+		<filter name="remark" express="remark like concat('%',${@remark},'%')"/>
+	</query>
+	
+	
+	<execute name="add">
+		<param name="id" dataType="number" />
+		<param name="ckey" dataType="varchar" />
+		<param name="cvalue" dataType="varchar" />
+		<param name="remark" dataType="varchar" />
+		<sqls>
+			<collisionSql
+				where="exists (select 1 from common_config where id=${@id} and ckey=${@ckey})"
+				message="产品ID:#{@id},键:#{@ckey} 已经存在！" />
+			<executeSql>
+			 <![CDATA[
+			    INSERT INTO common_config
+				   (id,
+					ckey,
+					cvalue,
+					remark)
+				VALUES
+					(${@id},
+					${@ckey},
+					${@cvalue},
+					${@remark})
+			 ]]>
+			</executeSql>
+		</sqls>
+	</execute>
+
+	<execute name="update">
+		<param name="id" dataType="number" />
+		<param name="ckey" dataType="varchar" />
+		<param name="cvalue" dataType="varchar" />
+		<param name="remark" dataType="varchar" />
+		<sqls>
+				
+			<executeSql>
+			  <![CDATA[
+				update common_config set 
+					cvalue = ${@cvalue} ,
+					remark =${@remark}
+				where id = ${@id} 
+			  ]]>
+			</executeSql>
+		</sqls>
+	</execute>
+	
+	<execute name="delete">
+		<param name="id" dataType="number" />
+		<param name="ckey" dataType="varchar" />
+		<param name="cvalue" dataType="varchar" />
+		<param name="remark" dataType="varchar" />
+		<sqls>
+			<executeSql>
+			  <![CDATA[
+				delete from common_config where id= ${@id} 
+			  ]]>
+			</executeSql>
+		</sqls>
+	</execute>
+</model>

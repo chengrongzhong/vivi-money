@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from v_performance
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="teacher_id" express="teacher_id = ${@teacher_id}"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="monthPerf">
+        <sql>
+            <![CDATA[
+                select *
+                from v_performance
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="opetime" express="opetime like ${@opetime}"/>
+    </query>
+
+    <execute name="add">
+        <param name="id" dataType="number"/>
+        <param name="count" dataType="number"/>
+        <param name="add_count" dataType="number"/>
+        <param name="add_count_desc" dataType="varchar"/>
+        <param name="teacher_id" dataType="number"/>
+        <param name="opetime" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_performance
+                (
+                count,
+                add_count,
+                add_count_desc,
+                teacher_id,
+                opetime,
+                createtime,
+                updatetime
+                )
+                VALUES
+                (
+                ${@count},
+                ${@add_count},
+                ${@add_count_desc},
+                ${@teacher_id},
+                ${@opetime},
+                NOW(),
+                NOW()
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="update">
+        <param name="id" dataType="number"/>
+        <param name="count" dataType="number"/>
+        <param name="add_count" dataType="number"/>
+        <param name="add_count_desc" dataType="varchar"/>
+        <param name="teacher_id" dataType="number"/>
+        <param name="opetime" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE v_performance SET
+                count=${@count},
+                add_count=${@add_count},
+                add_count_desc=${@add_count_desc},
+                teacher_id=${@teacher_id},
+                opetime=${@opetime},
+                updatetime=NOW()
+                WHERE id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM v_performance where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

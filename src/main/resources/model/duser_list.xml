@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from qiye_dealer_user
+                #WHERE_CLAUSE#
+                order by userid desc 
+            ]]>
+        </sql>
+        <filter name="loginname" express="loginname like concat('%',${@loginname},'%')"/>
+        <filter name="mobile" express="mobile like concat('%',${@mobile},'%')"/>
+        <filter name="wxmobile" express="wxmobile like concat('%',${@wxmobile},'%')"/>
+    </query>
+
+    <query name="parent" pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from qiye_dealer_user
+                WHERE parentuuid = ''
+                #AND_CLAUSE#
+                order by userid desc 
+            ]]>
+        </sql>
+        <filter name="loginname" express="loginname like concat('%',${@loginname},'%')"/>
+        <filter name="mobile" express="mobile like concat('%',${@mobile},'%')"/>
+        <filter name="wxmobile" express="wxmobile like concat('%',${@wxmobile},'%')"/>
+    </query>
+
+    <query name="child" pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from qiye_dealer_user
+                WHERE parentuuid != ''
+                #AND_CLAUSE#
+                order by userid desc 
+            ]]>
+        </sql>
+        <filter name="loginname" express="loginname like concat('%',${@loginname},'%')"/>
+        <filter name="mobile" express="mobile like concat('%',${@mobile},'%')"/>
+        <filter name="wxmobile" express="wxmobile like concat('%',${@wxmobile},'%')"/>
+    </query>
+
+</model>

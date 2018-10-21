@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from v_leave
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="teacher_id" express="teacher_id = ${@teacher_id}"/>
+        <filter name="leave_type_id" express="leave_type_id = ${@leave_type_id}"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="monthLeave">
+        <sql>
+            <![CDATA[
+                select *
+                from v_leave
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="opetime" express="opetime like ${@opetime}"/>
+    </query>
+
+    <execute name="add">
+        <param name="id" dataType="number"/>
+        <param name="leave_desc" dataType="varchar"/>
+        <param name="teacher_id" dataType="number"/>
+        <param name="twohourflag" dataType="number"/>
+        <param name="leave_day" dataType="number"/>
+        <param name="leave_type_id" dataType="number"/>
+        <param name="opetime" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_leave
+                (
+                leave_desc,
+                teacher_id,
+                leave_type_id,
+                twohourflag,
+                leave_day,
+                opetime,
+                createtime,
+                updatetime
+                )
+                VALUES
+                (
+                ${@leave_desc},
+                ${@teacher_id},
+                ${@leave_type_id},
+                ${@twohourflag},
+                ${@leave_day},
+                ${@opetime},
+                NOW(),
+                NOW()
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="update">
+        <param name="id" dataType="number"/>
+        <param name="leave_desc" dataType="varchar"/>
+        <param name="teacher_id" dataType="number"/>
+        <param name="twohourflag" dataType="number"/>
+        <param name="leave_day" dataType="number"/>
+        <param name="leave_type_id" dataType="number"/>
+        <param name="opetime" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE v_leave SET
+                leave_desc=${@leave_desc},
+                teacher_id=${@teacher_id},
+                twohourflag=${@twohourflag},
+                leave_day=${@leave_day},
+                leave_type_id=${@leave_type_id},
+                opetime=${@opetime}
+                WHERE id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM v_leave where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="50">
+        <sql>
+            <![CDATA[
+                select * 
+                from v_month_money_detail
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="id" express="id = ${@id}"/>
+        <filter name="month_money_id" express="month_money_id = ${@month_money_id}"/>
+    </query>
+
+    <execute name="add">
+        <param name="month_money_id" dataType="number"/>
+        <param name="teacher_id" dataType="number"/>
+        <param name="teacher_name" dataType="varchar"/>
+        <param name="duty_name" dataType="varchar"/>
+        <param name="base_money" dataType="number"/>
+        <param name="position_money" dataType="number"/>
+        <param name="start_id" dataType="number"/>
+        <param name="start_name" dataType="varchar"/>
+        <param name="start_money" dataType="number"/>
+        <param name="performance_money" dataType="number"/>
+        <param name="jiaotong_money" dataType="number"/>
+        <param name="security_money" dataType="number"/>
+        <param name="class_att_money" dataType="number"/>
+        <param name="quanqin" dataType="number"/>
+        <param name="birth_day_money" dataType="number"/>
+        <param name="work_year_money" dataType="number"/>
+        <param name="other_money" dataType="number"/>
+        <param name="shebao" dataType="number"/>
+        <param name="sushe" dataType="number"/>
+        <param name="leave_desc" dataType="varchar"/>
+        <param name="leave_money" dataType="number"/>
+        <param name="should_pay" dataType="number"/>
+        <param name="real_pay" dataType="number"/>
+        <param name="special" dataType="number"/>
+        <param name="company_money" dataType="number"/>
+
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_month_money_detail
+                (
+                month_money_id,
+                teacher_id,
+                teacher_name,
+                duty_name,
+                base_money,
+                position_money,
+                start_id,
+                start_name,
+                start_money,
+                performance_money,
+                jiaotong_money,
+                security_money,
+                class_att_money,
+                quanqin,
+                birth_day_money,
+                work_year_money,
+                other_money,
+                shebao,
+                sushe,
+                leave_desc,
+                leave_money,
+                should_pay,
+                real_pay,
+                special,
+                company_money
+                )
+                VALUES
+                (
+                ${@month_money_id},
+                ${@teacher_id},
+                ${@teacher_name},
+                ${@duty_name},
+                ${@base_money},
+                ${@position_money},
+                ${@start_id},
+                ${@start_name},
+                ${@start_money},
+                ${@performance_money},
+                ${@jiaotong_money},
+                ${@security_money},
+                ${@class_att_money},
+                ${@quanqin},
+                ${@birth_day_money},
+                ${@work_year_money},
+                ${@other_money},
+                ${@shebao},
+                ${@sushe},
+                ${@leave_desc},
+                ${@leave_money},
+                ${@should_pay},
+                ${@real_pay},
+                ${@special},
+                ${@company_money}
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from v_security
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="teacher_id" express="teacher_id = ${@teacher_id}"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="monthSecurity">
+        <sql>
+            <![CDATA[
+                select *
+                from v_security
+                #WHERE_CLAUSE#
+                order by id desc
+            ]]>
+        </sql>
+        <filter name="opetime" express="opetime like ${@opetime}"/>
+    </query>
+
+    <execute name="add">
+        <param name="id" dataType="number"/>
+        <param name="security_desc" dataType="varchar"/>
+        <param name="teacher_id" dataType="varchar"/>
+        <param name="reduce_money" dataType="number"/>
+        <param name="opetime" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO v_security
+                (
+                security_desc,
+                teacher_id,
+                reduce_money,
+                opetime,
+                createtime,
+                updatetime
+                )
+                VALUES
+                (
+                ${@security_desc},
+                ${@teacher_id},
+                ${@reduce_money},
+                ${@opetime},
+                NOW(),
+                NOW()
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="update">
+        <param name="id" dataType="number"/>
+        <param name="security_desc" dataType="varchar"/>
+        <param name="teacher_id" dataType="varchar"/>
+        <param name="reduce_money" dataType="number"/>
+        <param name="opetime" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE v_security SET
+                security_desc=${@security_desc},
+                teacher_id{@teacher_id},
+                reduce_money=${@reduce_money},
+                opetime=${@opetime},
+                updatetime=NOW()
+                WHERE id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM v_security where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>

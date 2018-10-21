@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select c.*, u.sub_script_user
+                from qiye_dealer_customer c, qiye_dealer_user u
+                WHERE c.channeluseruuid = u.uuid
+                #AND_CLAUSE#
+                group by c.customerid
+                order by c.customerid desc 
+            ]]>
+        </sql>
+        <filter name="customerid" express="c.customerid = ${@customerid}"/>
+        <filter name="customername" express="c.customername like concat('%',${@customername},'%')"/>
+        <filter name="branchcompanyname" express="c.branchcompanyname like concat('%',${@branchcompanyname},'%')"/>
+    </query>
+
+    <execute name="update">
+        <param name="sub_script_user" dataType="varchar"/>
+        <param name="channeluseruuid" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE qiye_dealer_user SET 
+                sub_script_user=${@sub_script_user}
+                WHERE uuid = ${@channeluseruuid}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+</model>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
+    <query pagerSize="20">
+        <sql>
+            <![CDATA[
+                select * 
+                from qiye_dealer_subscript
+                #WHERE_CLAUSE#
+                order by id desc 
+            ]]>
+        </sql>
+        <filter name="username" express="username like concat('%',${@username},'%')"/>
+        <filter name="id" express="id = ${@id}"/>
+    </query>
+
+    <query name="list" pagerSize="50">
+        <sql>
+            <![CDATA[
+                select id as code, username as name
+                from qiye_dealer_subscript
+            ]]>
+        </sql>
+    </query>
+
+    <execute name="add">
+        <param name="id" dataType="number"/>
+        <param name="sptuserid" dataType="varchar"/>
+        <param name="username" dataType="varchar"/>
+        <param name="function" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                INSERT INTO qiye_dealer_subscript 
+                (
+                sptuserid,
+                username,
+                function
+                )
+                VALUES
+                (
+                ${@sptuserid},
+                ${@username}
+                ${@function}
+                )
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="update">
+        <param name="id" dataType="number"/>
+        <param name="sptuserid" dataType="varchar"/>
+        <param name="username" dataType="varchar"/>
+        <param name="function" dataType="varchar"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                UPDATE qiye_dealer_subscript SET 
+                sptuserid=${@sptuserid},
+                username=${@username},
+                function=${@function}
+                WHERE id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+
+    <execute name="delete">
+        <param name="id" dataType="number"/>
+        <sqls>
+            <executeSql>
+                <![CDATA[
+                DELETE FROM qiye_dealer_subscript where id = ${@id}
+            ]]>
+            </executeSql>
+        </sqls>
+    </execute>
+</model>
