@@ -42,6 +42,9 @@
         <param name="base_money" dataType="number"/>
         <param name="other_money" dataType="number"/>
         <param name="position_money" dataType="number"/>
+        <param name="is_performance" dataType="number"/>
+        <param name="is_birth" dataType="number"/>
+        <param name="is_real" dataType="number"/>
         <sqls>
             <executeSql>
                 <![CDATA[
@@ -50,14 +53,20 @@
                 duty_name,
                 base_money,
                 other_money,
-                position_money
+                position_money,
+                is_performance,
+                is_birth,
+                is_real
                 )
                 VALUES
                 (
                 ${@duty_name},
                 ${@base_money},
                 ${@other_money},
-                ${@position_money}
+                ${@position_money},
+                ${@is_performance},
+                ${@is_birth},
+                ${@is_real}
                 )
             ]]>
             </executeSql>
@@ -70,6 +79,9 @@
         <param name="base_money" dataType="number"/>
         <param name="other_money" dataType="number"/>
         <param name="position_money" dataType="number"/>
+        <param name="is_performance" dataType="number"/>
+        <param name="is_birth" dataType="number"/>
+        <param name="is_real" dataType="number"/>
         <sqls>
             <executeSql>
                 <![CDATA[
@@ -77,7 +89,10 @@
                 duty_name=${@duty_name},
                 base_money=${@base_money},
                 other_money=${@other_money},
-                position_money=${@position_money}
+                position_money=${@position_money},
+                is_performance=${@is_performance},
+                is_birth=${@is_birth},
+                is_real=${@is_real}
                 WHERE id = ${@id}
             ]]>
             </executeSql>

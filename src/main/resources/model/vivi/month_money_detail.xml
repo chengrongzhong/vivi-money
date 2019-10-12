@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model xmlns="http://dbfound.googlecode.com/model" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://dbfound.googlecode.com/model http://dbfound.googlecode.com/svn/tags/v2/model.xsd">
-    <query pagerSize="50">
+    <query pagerSize="100">
         <sql>
             <![CDATA[
                 select * 
@@ -25,9 +25,11 @@
         <param name="start_name" dataType="varchar"/>
         <param name="start_money" dataType="number"/>
         <param name="performance_money" dataType="number"/>
+        <param name="performance_add" dataType="number"/>
         <param name="jiaotong_money" dataType="number"/>
         <param name="security_money" dataType="number"/>
         <param name="class_att_money" dataType="number"/>
+        <param name="lunch_att_money" dataType="number"/>
         <param name="quanqin" dataType="number"/>
         <param name="birth_day_money" dataType="number"/>
         <param name="work_year_money" dataType="number"/>
@@ -56,9 +58,11 @@
                 start_name,
                 start_money,
                 performance_money,
+                performance_add,
                 jiaotong_money,
                 security_money,
                 class_att_money,
+                lunch_att_money,
                 quanqin,
                 birth_day_money,
                 work_year_money,
@@ -84,9 +88,11 @@
                 ${@start_name},
                 ${@start_money},
                 ${@performance_money},
+                ${@performance_add},
                 ${@jiaotong_money},
                 ${@security_money},
                 ${@class_att_money},
+                ${@lunch_att_money},
                 ${@quanqin},
                 ${@birth_day_money},
                 ${@work_year_money},

@@ -70,18 +70,29 @@ public class ViviMoneyGen extends BaseAction {
                 setStartData(dataMap, start_id);
                 setMonthData(dataMap, monthGen + "%", teacher_id);
 
-                if (duty_id == 8 || duty_id == 11 || duty_id == 14 || duty_id == 15 || duty_id == 16) {
-                    dataMap.put("performance_money", 0);
+                int is_performance = 0;
+                Context ctx2 = ContextUtil.newContext("id", duty_id);
+                QueryResponseObject obj2 = ModelEngine.query(ctx2, "vivi/duty", "queryD");
+                List<Map<String, Object>> dutyDatas = (List<Map<String, Object>>) obj2.getDatas();
+                for (Map<String, Object> dutydata : dutyDatas) {
+                    is_performance = ContextUtil.getIntegerParam(dutydata, "is_performance");
                 }
+
+                if (is_performance == 0) {
+                    dataMap.put("performance_money", 0);
+                    dataMap.put("performance_add", 0);
+                }
+
                 if (duty_id == 12) {
                     dataMap.put("quanqin", 0);
-                    dataMap.put("performance_money", 0);
                     dataMap.put("security_money", 0);
                 }
                 // 算请假前要把所有应付工资算出来
                 float shouldPay = getShouldPay(dataMap);
                 dataMap.put("should_pay", shouldPay);
-                QueryResponseObject monthLeave = ModelEngine.query(context, "vivi/leave", "monthLeave");
+                // 生成月份 yyyy-mm 格式
+                Context opetime = ContextUtil.newContext("opetime", monthGen+"%");
+                QueryResponseObject monthLeave = ModelEngine.query(opetime, "vivi/leave", "monthLeave");
                 setMonthLeave(teacher_id, dataMap, monthLeave.getDatas());
                 // 修改了全勤工资之后，再算一次应付工资
                 dataMap.put("should_pay", getShouldPay(dataMap));
@@ -101,7 +112,16 @@ public class ViviMoneyGen extends BaseAction {
         int money = 0;
         String birthMonth = birth.substring(5, 7);
         String nowMonth = now.substring(5, 7);
-        if (duty_id == 11 || duty_id == 12 || duty_id == 14 || duty_id == 15 || duty_id == 16) {
+
+        int is_birth = 0;
+        Context ctx2 = ContextUtil.newContext("id", duty_id);
+        QueryResponseObject obj2 = ModelEngine.query(ctx2, "vivi/duty", "queryD");
+        List<Map<String, Object>> dutyDatas = (List<Map<String, Object>>) obj2.getDatas();
+        for (Map<String, Object> dutydata : dutyDatas) {
+            is_birth = ContextUtil.getIntegerParam(dutydata, "is_birth");
+        }
+        // 没有生日津贴，返回
+        if (is_birth == 0) {
             return money;
         }
         if (nowMonth.equals(birthMonth)) {
@@ -182,8 +202,10 @@ public class ViviMoneyGen extends BaseAction {
         Context context = ContextUtil.newContext("opetime", month);
         QueryResponseObject monthPerf = ModelEngine.query(context, "vivi/performance", "monthPerf");
         setMonthPerf(teacherId, dataMap, monthPerf.getDatas());
-        QueryResponseObject monthAtt = ModelEngine.query(context, "vivi/class_att", "monthAtt");
-        setMonthAtt(teacherId, dataMap, monthAtt.getDatas());
+        QueryResponseObject classMonthAtt = ModelEngine.query(context, "vivi/class_att", "monthAtt");
+        setClassMonthAtt(teacherId, dataMap, classMonthAtt.getDatas());
+        QueryResponseObject lunchMonthAtt = ModelEngine.query(context, "vivi/lunch_att", "monthAtt");
+        setLunchMonthAtt(teacherId, dataMap, lunchMonthAtt.getDatas());
         QueryResponseObject monthSecurity = ModelEngine.query(context, "vivi/security", "monthSecurity");
         setMonthSecurity(teacherId, dataMap, monthSecurity.getDatas());
     }
@@ -191,6 +213,7 @@ public class ViviMoneyGen extends BaseAction {
     // 月度绩效
     private void setMonthPerf(int teacherId, Map<String, Object> dataMap, List<Map<String, Object>> list) {
         dataMap.put("performance_money", 200);
+        dataMap.put("performance_add", 0);
         for (Map<String, Object> map : list) {
             Integer teacher_id = ContextUtil.getIntegerParam(map, "teacher_id");
             if (teacher_id == teacherId) {
@@ -207,14 +230,15 @@ public class ViviMoneyGen extends BaseAction {
                 } else if (count >= 71) {
                     base = base - (100 - count) * 3;
                 }
-                System.out.println("教师id=" + teacherId + "， 基本绩效=" + base + "， 加分绩效=" + addCount * 10);
-                base = base + addCount * 10;
                 dataMap.put("performance_money", base);
+                System.out.println("教师id=" + teacherId + "， 基本绩效=" + base + "， 加分绩效=" + addCount * 10);
+                dataMap.put("performance_add", addCount * 10);
                 return;
             }
         }
     }
 
+    // 请假（事假1天扣全勤，事假半天扣一半全勤。病假1天扣一半全勤，病假半天扣4分之一全勤。丧假3天不用扣钱）
     private void setMonthLeave(int teacherId, Map<String, Object> dataMap, List<Map<String, Object>> list) {
         JSONObject leave_desc = new JSONObject();
         float reduce = 0;
@@ -264,7 +288,9 @@ public class ViviMoneyGen extends BaseAction {
                 if (leave_desc.containsKey("5")) {
                     String leave_day_str = leave_desc.get("5").toString();
                     float leave_day = Float.parseFloat(leave_day_str);
-                    if (leave_day > 0) {
+                    if (leave_day > 0 && leave_day <= 0.5) {
+                        dataMap.put("quanqin", 50);
+                    } else if (leave_day > 0.5) {
                         dataMap.put("quanqin", 0);
                     }
                 }
@@ -299,13 +325,13 @@ public class ViviMoneyGen extends BaseAction {
         dataMap.put("leave_desc", desc);
     }
 
-    private void setMonthAtt(int teacherId, Map<String, Object> dataMap, List<Map<String, Object>> list) {
+    private void setClassMonthAtt(int teacherId, Map<String, Object> dataMap, List<Map<String, Object>> list) {
         for (Map<String, Object> map : list) {
             Integer class_id = ContextUtil.getIntegerParam(map, "class_id");
             Integer count = ContextUtil.getIntegerParam(map, "count");
             Integer student = ContextUtil.getIntegerParam(map, "student");
             int dianshu = 10;
-            if (student > 4 && student <= 6) {
+            if (student >= 4 && student <= 6) {
                 dianshu = 10;
             } else if (student <= 10) {
                 dianshu = 15;
@@ -357,6 +383,68 @@ public class ViviMoneyGen extends BaseAction {
         }
     }
 
+    private void setLunchMonthAtt(int teacherId, Map<String, Object> dataMap, List<Map<String, Object>> list) {
+        for (Map<String, Object> map : list) {
+            Integer class_id = ContextUtil.getIntegerParam(map, "class_id");
+            Integer count = ContextUtil.getIntegerParam(map, "count");
+            Integer student = ContextUtil.getIntegerParam(map, "student");
+            int dianshu = 0;
+            if (student >= 30 && student <= 40) {
+                dianshu = 5;
+            } else if (student <= 50) {
+                dianshu = 10;
+            } else if (student <= 60) {
+                dianshu = 15;
+            } else if (student <= 70) {
+                dianshu = 20;
+            } else if (student <= 80) {
+                dianshu = 25;
+            } else if (student <= 90) {
+                dianshu = 30;
+            }
+            float money = 0f;
+            if (dataMap.containsKey("lunch_att_money")) {
+                money = (float) dataMap.get("lunch_att_money");
+            }
+            Context ctx = ContextUtil.newContext("id", class_id);
+            QueryResponseObject obj = ModelEngine.query(ctx, "vivi/lunch", "queryD");
+            Map<String, Object> sngClass = (Map<String, Object>) obj.getDatas().get(0);
+            String main_teacher_id = ContextUtil.getStringParam(sngClass, "main_teacher_id");
+            String vice_teacher_id = ContextUtil.getStringParam(sngClass, "vice_teacher_id");
+            String life_teacher_id = ContextUtil.getStringParam(sngClass, "life_teacher_id");
+            int percen = 0;
+            boolean viceFlag = false;
+            boolean lifeFlag = false;
+            if (!StringUtils.isEmpty(vice_teacher_id)) {
+                String[] viceTeacher = vice_teacher_id.split(",");
+                for (String str : viceTeacher) {
+                    if (str.equals(teacherId + "")) {
+                        viceFlag = true;
+                    }
+                }
+            }
+            if (!StringUtils.isEmpty(life_teacher_id)) {
+                String[] lifeTeacher = life_teacher_id.split(",");
+                for (String str : lifeTeacher) {
+                    if (str.equals(teacherId + "")) {
+                        lifeFlag = true;
+                    }
+                }
+            }
+            if (!StringUtils.isEmpty(main_teacher_id) && main_teacher_id.equals(teacherId + "")) {
+                percen = ContextUtil.getIntegerParam(sngClass, "main_get");
+            } else if (!StringUtils.isEmpty(vice_teacher_id) && viceFlag) {
+                percen = ContextUtil.getIntegerParam(sngClass, "vice_get");
+            } else if (!StringUtils.isEmpty(life_teacher_id) && lifeFlag) {
+                percen = ContextUtil.getIntegerParam(sngClass, "life_get");
+            }
+            float total = (count - 80) * dianshu * percen;
+            float nowmoney = total / 100;
+            money = money + nowmoney;
+            dataMap.put("lunch_att_money", money);
+        }
+    }
+
     private void setMonthSecurity(int teacherId, Map<String, Object> dataMap, List<Map<String, Object>> list) {
         int base = 100;
         for (Map<String, Object> map : list) {
@@ -397,6 +485,7 @@ public class ViviMoneyGen extends BaseAction {
         return dateString;
     }
 
+    // 是否正式员工
     public int getTeacherType(int teacherId) {
         int type = 0;
         Context ctx = ContextUtil.newContext("id", teacherId);
@@ -404,11 +493,18 @@ public class ViviMoneyGen extends BaseAction {
         List<Map<String, Object>> datas = (List<Map<String, Object>>) obj.getDatas();
         for (Map<String, Object> teacher : datas) {
             int duty_id = ContextUtil.getIntegerParam(teacher, "duty_id");
-            if (duty_id == 11 || duty_id == 12 || duty_id == 14 || duty_id == 15 || duty_id == 16) {
-                type = 2;
-            } else {
-                type = 1;
+            Context ctx2 = ContextUtil.newContext("id", duty_id);
+            QueryResponseObject obj2 = ModelEngine.query(ctx2, "vivi/duty", "queryD");
+            List<Map<String, Object>> dutyDatas = (List<Map<String, Object>>) obj2.getDatas();
+            for (Map<String, Object> dutydata : dutyDatas) {
+                type = ContextUtil.getIntegerParam(dutydata, "is_real");
             }
+        }
+        if (type == 0) {
+            return 2;
+        }
+        if (type == 1) {
+            return 1;
         }
         return type;
     }
@@ -418,16 +514,25 @@ public class ViviMoneyGen extends BaseAction {
         int position_money = (Integer) dataMap.get("position_money");
         int start_money = (Integer) dataMap.get("start_money");
         int performance_money = (Integer) dataMap.get("performance_money");
+        int performance_add = (Integer) dataMap.get("performance_add");
         int jiaotong_money = (Integer) dataMap.get("jiaotong_money");
         int security_money = (Integer) dataMap.get("security_money");
-        float class_att_money = (float) dataMap.get("class_att_money");
+        float class_att_money = 0;
+        float lunch_att_money = 0;
+        if (dataMap.containsKey("class_att_money")) {
+            class_att_money = (float) dataMap.get("class_att_money");
+        }
+
+        if (dataMap.containsKey("lunch_att_money")) {
+            lunch_att_money = (float) dataMap.get("lunch_att_money");
+        }
         int quanqin = (Integer) dataMap.get("quanqin");
         int birth_day_money = (Integer) dataMap.get("birth_day_money");
         int work_year_money = (Integer) dataMap.get("work_year_money");
         int other_money = (Integer) dataMap.get("other_money");
         int company_money = (Integer) dataMap.get("company_money");
 
-        float shouldPay = base_money + position_money+start_money+performance_money+jiaotong_money+security_money+class_att_money+quanqin+birth_day_money+work_year_money+other_money+company_money;
+        float shouldPay = base_money + position_money+start_money+performance_money+performance_add+jiaotong_money+security_money+class_att_money+lunch_att_money+quanqin+birth_day_money+work_year_money+other_money+company_money;
         return shouldPay;
     }
 

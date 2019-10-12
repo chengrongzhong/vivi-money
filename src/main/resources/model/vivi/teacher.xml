@@ -21,6 +21,7 @@
                 from v_teacher
                 #WHERE_CLAUSE#
                 order by id asc
+                limit 100
             ]]>
         </sql>
         <filter name="id" express="id = ${@id}"/>

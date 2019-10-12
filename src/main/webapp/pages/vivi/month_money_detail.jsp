@@ -54,7 +54,7 @@
     <%--<d:button title="重置" click="reset"/>--%>
 <%--</d:buttonGroup>--%>
 
-<d:grid id="dataGrid" pagerSize="50" height="$D.getFullHeight('dataGrid')" isCellEditable="isCellEditable"
+<d:grid id="dataGrid" pagerSize="100" height="$D.getFullHeight('dataGrid')" isCellEditable="isCellEditable"
         queryUrl="vivi/month_money_detail.query?month_money_id=${param.month_money_id}" selectFirstRow="false"
         model="vivi/month_money_detail" autoQuery="true" forceFit="false">
     <d:toolBar>
@@ -66,23 +66,31 @@
         <d:column name="duty_name" prompt="岗位" width="160"/>
         <d:column name="base_money" prompt="基本工资" sortable="true" width="80"/>
         <d:column name="position_money" prompt="岗位" sortable="true" width="60"/>
-        <d:column name="start_name" prompt="星级名称" width="80"/>
-        <d:column name="start_money" prompt="星级工资" sortable="true"  width="80"/>
         <d:column name="performance_money" prompt="绩效工资" sortable="true"  width="80"/>
         <d:column name="jiaotong_money" prompt="交通" sortable="true" width="60"/>
         <d:column name="security_money" prompt="安全" sortable="true" width="60"/>
-        <d:column name="class_att_money" prompt="班级出勤" sortable="true" width="80"/>
         <d:column name="quanqin" prompt="全勤" sortable="true" width="60"/>
-        <d:column name="birth_day_money" prompt="生日" sortable="true" width="60"/>
+        <d:column name="class_att_money" prompt="班级出勤" sortable="true" width="80"/>
+        <d:column name="lunch_att_money" prompt="后厨提成" sortable="true" width="80"/>
+        <d:column name="start_name" prompt="星级名称" width="80"/>
+        <d:column name="start_money" prompt="星级工资" sortable="true"  width="80"/>
+        <d:column name="performance_add" prompt="绩效奖励" sortable="true"  width="80"/>
         <d:column name="work_year_money" prompt="工龄" sortable="true" width="60"/>
         <d:column name="other_money" prompt="补助" sortable="true" width="60"/>
+        <d:column name="birth_day_money" prompt="生日" sortable="true" width="60"/>
+
+        <d:column name="company_money" prompt="管理公司" sortable="true" width="80"/>
+        <d:column name="should_pay" prompt="应发" sortable="true" width="60"/>
+
         <d:column name="shebao" prompt="社保" sortable="true"  width="60"/>
         <d:column name="sushe" prompt="宿舍" sortable="true" width="60"/>
         <d:column name="leave_desc" prompt="请假" width="160"/>
         <d:column name="leave_money" prompt="请假扣除" sortable="true" width="80"/>
-        <d:column name="company_money" prompt="管理公司" sortable="true" width="80"/>
-        <d:column name="should_pay" prompt="应发" sortable="true" width="60"/>
+        <d:column name="special" prompt="其他" sortable="true" width="80"/>
         <d:column name="real_pay" prompt="实发" sortable="true" width="60"/>
+
+
+
     </d:columns>
 </d:grid>
 </body>

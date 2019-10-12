@@ -31,6 +31,12 @@
         }
     }
 
+    var typeStore = new Ext.data.SimpleStore({
+        //data : [[ 0, "apk下发" ],[ 1, "下发为空" ]],
+        data: [[0, "否"], [1, "是"]],
+        fields: ["code", "name"]
+    });
+
 </script>
 
 <body>
@@ -64,6 +70,9 @@
         <d:column name="base_money" prompt="基本工资" editor="numberfield" width="200"/>
         <d:column name="position_money" prompt="岗位工资" editor="numberfield" width="200"/>
         <d:column name="other_money" prompt="其他补贴" editor="numberfield" width="200"/>
+        <d:column name="is_performance" prompt="是否有绩效工资" width="150"  required="true" editor="combo" options="typeStore" displayField="name" valueField="code" editable="true" />
+        <d:column name="is_birth" prompt="是否有生日补贴" width="150"  required="true" editor="combo" options="typeStore" displayField="name" valueField="code" editable="true" />
+        <d:column name="is_real" prompt="是否正式员工" width="150"  required="true" editor="combo" options="typeStore" displayField="name" valueField="code" editable="true" />
     </d:columns>
 </d:grid>
 </body>
