@@ -12,6 +12,7 @@
         </sql>
         <filter name="teacher_name" express="teacher_name like concat('%',${@teacher_name},'%')"/>
         <filter name="id" express="id = ${@id}"/>
+        <filter name="state" express="state = ${@state}"/>
     </query>
 
     <query name="queryD">
@@ -19,7 +20,8 @@
             <![CDATA[
                 select *
                 from v_teacher
-                #WHERE_CLAUSE#
+                WHERE state = 1
+                #AND_CLAUSE#
                 order by id asc
                 limit 100
             ]]>
@@ -49,6 +51,7 @@
         <param name="class_id" dataType="number"/>
         <param name="other" dataType="number"/>
         <param name="sushe" dataType="number"/>
+        <param name="state" dataType="number"/>
         <param name="company_money" dataType="number"/>
 
         <sqls>
@@ -66,6 +69,7 @@
                 class_id,
                 other,
                 sushe,
+                state,
                 company_money
                 )
                 VALUES
@@ -80,6 +84,7 @@
                 ${@class_id},
                 ${@other},
                 ${@sushe},
+                ${@state},
                 ${@company_money}
                 )
             ]]>
@@ -100,6 +105,7 @@
         <param name="other" dataType="number"/>
         <param name="company_money" dataType="number"/>
         <param name="sushe" dataType="number"/>
+        <param name="state" dataType="number"/>
         <sqls>
             <executeSql>
                 <![CDATA[
@@ -114,6 +120,7 @@
                 class_id=${@class_id},
                 other=${@other},
                 sushe=${@sushe},
+                state=${@state},
                 company_money=${@company_money}
                 WHERE id = ${@id}
             ]]>

@@ -53,7 +53,7 @@
 
     //标签模块依从窗口
     function openAbTestModuleWin(moduleid, modulename){
-        $D.open('LangWin', modulename, $D.getFullWidth('dataGrid')-50, $D.getFullHeight('dataGrid'),
+        $D.open('LangWin', "工资详情", $D.getFullWidth('dataGrid')-50, $D.getFullHeight('dataGrid'),
             '${basePath}pages/vivi/month_money_detail.jsp?month_money_id=' + moduleid, query);
     }
 
@@ -151,11 +151,11 @@
         <d:gridButton type="delete"/>
     </d:toolBar>
     <d:columns>
-        <d:column name="id" prompt="ID" width="80" renderer="showOpt"/>
-        <d:column name="name" prompt="名称" width="250"/>
-        <d:column name="descript" prompt="描述" width="200"/>
-        <d:column name="createtime" prompt="创建时间" width="200"/>
-        <d:column name="updatetime" prompt="更新时间" width="200"/>
+        <d:column name="id" prompt="ID" width="80" renderer="showOpt" sortable="true"/>
+        <d:column name="name" prompt="名称" width="250" sortable="true"/>
+        <d:column name="descript" prompt="描述" width="200" sortable="true"/>
+        <d:column name="createtime" prompt="创建时间" width="200" sortable="true"/>
+        <d:column name="updatetime" prompt="更新时间" width="200" sortable="true"/>
     </d:columns>
 </d:grid>
 </body>

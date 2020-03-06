@@ -36,6 +36,11 @@
         data: [[99, "活动消息"], [1, "订单下达"], [2, "发运"], [3, "运抵"], [4, "冲红"], [5, "订单取消"]],
         fields: ["code", "name"]
     });
+
+    var statusStore = new Ext.data.SimpleStore( {
+        data: [[0, "离职"], [1, "在职"]],
+        fields : [ "code", "name" ]
+    });
 </script>
 
 <body>
@@ -50,6 +55,9 @@
             <d:event name="enter" handle="query"/>
         </d:field>
         <d:field name="teacher_name" prompt="教师名称" anchor="100%" editor="textfield" editable="false">
+            <d:event name="enter" handle="query"/>
+        </d:field>
+        <d:field name="state" prompt="状态" anchor="100%" editor="combo" options="statusStore" displayField="name" valueField="code" editable="true">
             <d:event name="enter" handle="query"/>
         </d:field>
     </d:line>
@@ -68,18 +76,19 @@
             <d:gridButton type="delete"/>
     </d:toolBar>
     <d:columns>
-        <d:column name="id" prompt="ID" width="80"/>
-        <d:column name="teacher_name" prompt="教师名称" editor="textfield" width="250"/>
-        <d:column name="birth" prompt="生日" editor="datefield" width="200"/>
-        <d:column name="join_time" prompt="入司时间" editor="datefield" width="200"/>
-        <d:column name="duty_id" prompt="职务" width="150"  required="true" editor="combo" options="duty_list" displayField="name" valueField="code" editable="true" />
-        <d:column name="start_id" prompt="星级" width="150"  required="true" editor="combo" options="start_list" displayField="name" valueField="code" editable="true" />
-        <d:column name="shebao" prompt="社保" editor="numberfield" width="200"/>
-        <d:column name="jiaotong" prompt="交通" editor="numberfield" width="200"/>
-        <d:column name="class_id" prompt="班级" editor="numberfield" width="200"/>
-        <d:column name="other" prompt="其他" editor="numberfield" width="200"/>
-        <d:column name="sushe" prompt="宿舍" editor="numberfield" width="200"/>
-        <d:column name="company_money" prompt="管理公司工资" editor="numberfield" width="200"/>
+        <d:column name="id" prompt="ID" width="80" sortable="true"/>
+        <d:column name="teacher_name" prompt="教师名称" editor="textfield" width="80" sortable="true"/>
+        <d:column name="state" prompt="状态" editor="combo" options="statusStore" displayField="name" valueField="code" editable="true" width="50" sortable="true"/>
+        <d:column name="birth" prompt="生日" editor="datefield" width="100"/>
+        <d:column name="join_time" prompt="入司时间" editor="datefield" width="100" sortable="true"/>
+        <d:column name="duty_id" prompt="职务" width="200"  required="true" editor="combo" options="duty_list" displayField="name" valueField="code" editable="true" sortable="true"/>
+        <d:column name="start_id" prompt="星级" width="100"  required="true" editor="combo" options="start_list" displayField="name" valueField="code" editable="true" sortable="true"/>
+        <d:column name="shebao" prompt="社保" editor="numberfield" width="100"/>
+        <d:column name="jiaotong" prompt="交通" editor="numberfield" width="100"/>
+        <d:column name="class_id" prompt="班级" editor="numberfield" width="100"/>
+        <d:column name="other" prompt="其他" editor="numberfield" width="100"/>
+        <d:column name="sushe" prompt="宿舍" editor="numberfield" width="100"/>
+        <d:column name="company_money" prompt="管理公司工资" editor="numberfield" width="100"/>
     </d:columns>
 </d:grid>
 </body>

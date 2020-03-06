@@ -68,7 +68,7 @@
         <d:field name="teacher_id" anchor="100%" editable="false" editor="combo" options="teacher_list" displayField="name" valueField="code"  prompt="选择老师" >
             <d:event name="select" handle="query"/>
         </d:field>
-        <d:field name="leave_type_id" anchor="100%" editable="false" editor="combo" options="leave_type_list" displayField="name" valueField="code"  prompt="选择老师" >
+        <d:field name="leave_type_id" anchor="100%" editable="false" editor="combo" options="leave_type_list" displayField="name" valueField="code"  prompt="请假类型" >
             <d:event name="select" handle="query"/>
         </d:field>
     </d:line>

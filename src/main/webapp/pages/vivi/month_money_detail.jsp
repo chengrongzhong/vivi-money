@@ -62,7 +62,7 @@
     </d:toolBar>
     <d:columns>
         <%--<d:column name="id" prompt="ID" width="50"/>--%>
-        <d:column name="teacher_name" prompt="姓名" width="70"/>
+        <d:column name="teacher_name" prompt="姓名" width="70" sortable="true"/>
         <d:column name="duty_name" prompt="岗位" width="160"/>
         <d:column name="base_money" prompt="基本工资" sortable="true" width="80"/>
         <d:column name="position_money" prompt="岗位" sortable="true" width="60"/>

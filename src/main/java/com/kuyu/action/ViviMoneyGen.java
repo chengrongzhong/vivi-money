@@ -145,7 +145,7 @@ public class ViviMoneyGen extends BaseAction {
         long days = daysBetween / 365;
         int countYear = Integer.parseInt(days+"");
 
-        if (duty_id == 17 || duty_id == 10 || duty_id == 8 || duty_id == 1) {
+        if (duty_id == 33 || duty_id == 17 || duty_id == 10 || duty_id == 8 || duty_id == 1) {
             if (countYear >= 1) {
                 countYear = countYear - 1;
             }
@@ -257,7 +257,7 @@ public class ViviMoneyGen extends BaseAction {
                 System.out.println(leave_day_str);
                 float leave_day = Float.parseFloat(leave_day_str);
                 if (leave_desc.containsKey(leave_type_id + "")) {
-                    float oldDay = (float) leave_desc.get(leave_type_id + "");
+                    float oldDay = (Float) leave_desc.get(leave_type_id + "");
                     float total = leave_day + oldDay;
                     leave_desc.put(leave_type_id + "", total);
                 } else {
@@ -299,13 +299,14 @@ public class ViviMoneyGen extends BaseAction {
         float base_money = 0;
         // 正式
         if (teacher_type == 1) {
+            // 基本工资
             base_money = (Integer) dataMap.get("base_money");
             int company_money = (Integer) dataMap.get("company_money");
             base_money = base_money + company_money;
         }
         // 试用期
         if (teacher_type == 2) {
-            base_money = (float) dataMap.get("should_pay");
+            base_money = (Float) dataMap.get("should_pay");
         }
         if (leave_desc.containsKey("1")) {
             // 病假
@@ -319,6 +320,36 @@ public class ViviMoneyGen extends BaseAction {
             float leave_day = Float.parseFloat(leave_day_str);
             reduce = reduce + base_money / 30 * leave_day;
         }
+
+        if (leave_desc.containsKey("6")) {
+            // 寒暑假
+            String leave_day_str = leave_desc.get("6").toString();
+            float leave_day = Float.parseFloat(leave_day_str);
+
+            // 岗位工资
+            int position_money = (Integer) dataMap.get("position_money");
+            // 星级工资
+            int start_money = (Integer) dataMap.get("start_money");
+            // 绩效工资
+            int performance_money = (Integer) dataMap.get("performance_money");
+            // 绩效奖励
+//            int performance_add = (Integer) dataMap.get("performance_add");
+            // 交通补贴
+            int jiaotong_money = (Integer) dataMap.get("jiaotong_money");
+            // 全勤
+            int quanqin = (Integer) dataMap.get("quanqin");
+            // 安全补贴
+            int security_money = (Integer) dataMap.get("security_money");
+            // 其他补贴
+            int other_money = (Integer) dataMap.get("other_money");
+
+            // 休假扣除金额
+            float vocation_reduce = (position_money + start_money + performance_money + jiaotong_money + quanqin + security_money + other_money) / 30 * leave_day;
+
+            System.out.println("教师ID：" + teacherId + ", 休假天数为：" + leave_day + ", 休假工资扣除：" + vocation_reduce);
+            reduce = reduce + vocation_reduce;
+        }
+
         dataMap.put("leave_money", reduce);
 
         String desc = getLeaveDesc(leave_desc);
@@ -342,7 +373,7 @@ public class ViviMoneyGen extends BaseAction {
             }
             float money = 0f;
             if (dataMap.containsKey("class_att_money")) {
-                money = (float) dataMap.get("class_att_money");
+                money = (Float) dataMap.get("class_att_money");
             }
             Context ctx = ContextUtil.newContext("id", class_id);
             QueryResponseObject obj = ModelEngine.query(ctx, "vivi/class", "queryD");
@@ -404,7 +435,7 @@ public class ViviMoneyGen extends BaseAction {
             }
             float money = 0f;
             if (dataMap.containsKey("lunch_att_money")) {
-                money = (float) dataMap.get("lunch_att_money");
+                money = (Float) dataMap.get("lunch_att_money");
             }
             Context ctx = ContextUtil.newContext("id", class_id);
             QueryResponseObject obj = ModelEngine.query(ctx, "vivi/lunch", "queryD");
@@ -510,21 +541,28 @@ public class ViviMoneyGen extends BaseAction {
     }
 
     public float getShouldPay(Map<String, Object> dataMap) {
+        // 基本工资
         int base_money = (Integer) dataMap.get("base_money");
+        // 岗位工资
         int position_money = (Integer) dataMap.get("position_money");
+        // 星级工资
         int start_money = (Integer) dataMap.get("start_money");
+        // 绩效工资
         int performance_money = (Integer) dataMap.get("performance_money");
+        // 绩效奖励
         int performance_add = (Integer) dataMap.get("performance_add");
+        // 交通补贴
         int jiaotong_money = (Integer) dataMap.get("jiaotong_money");
+        // 安全补贴
         int security_money = (Integer) dataMap.get("security_money");
         float class_att_money = 0;
         float lunch_att_money = 0;
         if (dataMap.containsKey("class_att_money")) {
-            class_att_money = (float) dataMap.get("class_att_money");
+            class_att_money = (Float) dataMap.get("class_att_money");
         }
 
         if (dataMap.containsKey("lunch_att_money")) {
-            lunch_att_money = (float) dataMap.get("lunch_att_money");
+            lunch_att_money = (Float) dataMap.get("lunch_att_money");
         }
         int quanqin = (Integer) dataMap.get("quanqin");
         int birth_day_money = (Integer) dataMap.get("birth_day_money");
@@ -537,11 +575,11 @@ public class ViviMoneyGen extends BaseAction {
     }
 
     public float getRealPay(Map<String, Object> dataMap) {
-        float shouldPay = (float) dataMap.get("should_pay");
+        float shouldPay = (Float) dataMap.get("should_pay");
         int shebao = (Integer) dataMap.get("shebao");
         int sushe = (Integer) dataMap.get("sushe");
-        float leave_money = (float) dataMap.get("leave_money");
-        float special = (float) dataMap.get("special");
+        float leave_money = (Float) dataMap.get("leave_money");
+        float special = (Float) dataMap.get("special");
         float realPay = shouldPay - shebao - sushe - leave_money - special;
         return realPay;
     }
@@ -562,6 +600,9 @@ public class ViviMoneyGen extends BaseAction {
         }
         if (jsonObject.containsKey("5")) {
             desc = desc + "事假：" + jsonObject.getString("5") + "天 ";
+        }
+        if (jsonObject.containsKey("6")) {
+            desc = desc + "寒暑假：" + jsonObject.getString("6") + "天 ";
         }
         return desc;
     }
