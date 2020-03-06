@@ -18,7 +18,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
 		<dependency>
@@ -37,14 +37,9 @@
 			<version>2.2.4</version>
 		</dependency>
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.1.32</version>
-		</dependency>
-		<dependency>
 			<groupId>com.github.nfwork</groupId>
 			<artifactId>dbfound</artifactId>
-			<version>2.3.4</version>
+			<version>2.4.4</version>
 		</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -55,6 +50,11 @@
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
         </dependency>
 
 
@@ -73,12 +73,25 @@
 		<defaultGoal>package</defaultGoal>
 		<plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.27.v20200227</version>
                 <configuration>
-                    <!-- <overlays> <overlay> <groupId>com.aebiz</groupId> <artifactId>customermgr</artifactId>
-                        </overlay> </overlays> -->
+                    <reload>manual</reload>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                    <httpConnector>
+                        <port>8080</port>
+                        <idleTimeout>60000</idleTimeout>
+                    </httpConnector>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>org.eclipse.jetty.server.Request.maxFormContentSize</name>
+                            <!-- 设置jetty允许传输数据的大小 -->
+                            <value>20000000</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
 		</plugins>
