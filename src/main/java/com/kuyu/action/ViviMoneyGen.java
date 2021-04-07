@@ -47,6 +47,16 @@ public class ViviMoneyGen extends BaseAction {
                 String special_str = ContextUtil.getStringParam(data, "other");
                 float special = Float.parseFloat(special_str);
                 Integer company_money = ContextUtil.getIntegerParam(data, "company_money");
+                // 20210407新增
+                Integer education_money = ContextUtil.getIntegerParam(data, "education_money");//学历补贴
+                Integer education_background = ContextUtil.getIntegerParam(data, "education_background");//教育补贴
+                Integer certificate = ContextUtil.getIntegerParam(data, "certificate");//证书补贴
+                Integer education_certificate = ContextUtil.getIntegerParam(data, "education_certificate");//教师证补贴
+                Integer low_age_class_money = ContextUtil.getIntegerParam(data, "low_age_class_money");//小龄班级补贴
+                Integer oil_money = ContextUtil.getIntegerParam(data, "oil_money");//油费补贴
+                Integer keshi_money = ContextUtil.getIntegerParam(data, "keshi_money");//课时补贴
+                Integer weekend_keshi_money = ContextUtil.getIntegerParam(data, "weekend_keshi_money");//周末课补贴
+
                 dataMap.put("teacher_id", teacher_id);
                 dataMap.put("teacher_name", teacher_name);
                 dataMap.put("jiaotong_money", jiaotong);
@@ -54,6 +64,15 @@ public class ViviMoneyGen extends BaseAction {
                 dataMap.put("sushe", sushe);
                 dataMap.put("special", special);
                 dataMap.put("company_money", company_money);
+
+                dataMap.put("education_money", education_money);
+                dataMap.put("education_background", education_background);
+                dataMap.put("certificate", certificate);
+                dataMap.put("education_certificate", education_certificate);
+                dataMap.put("low_age_class_money", low_age_class_money);
+                dataMap.put("oil_money", oil_money);
+                dataMap.put("keshi_money", keshi_money);
+                dataMap.put("weekend_keshi_money", weekend_keshi_money);
 
                 dataMap.put("quanqin", 100);
                 Integer duty_id = ContextUtil.getIntegerParam(data, "duty_id");
@@ -571,6 +590,26 @@ public class ViviMoneyGen extends BaseAction {
         int company_money = (Integer) dataMap.get("company_money");
 
         float shouldPay = base_money + position_money+start_money+performance_money+performance_add+jiaotong_money+security_money+class_att_money+lunch_att_money+quanqin+birth_day_money+work_year_money+other_money+company_money;
+
+        // 20210407新增
+        int education_money = (Integer) dataMap.get("education_money");
+        int education_background = (Integer) dataMap.get("education_background");
+        int certificate = (Integer) dataMap.get("certificate");
+        int education_certificate = (Integer) dataMap.get("education_certificate");
+        int low_age_class_money = (Integer) dataMap.get("low_age_class_money");
+        int oil_money = (Integer) dataMap.get("oil_money");
+        int keshi_money = (Integer) dataMap.get("keshi_money");
+        int weekend_keshi_money = (Integer) dataMap.get("weekend_keshi_money");
+
+        shouldPay += education_money;
+        shouldPay += education_background;
+        shouldPay += certificate;
+        shouldPay += education_certificate;
+        shouldPay += low_age_class_money;
+        shouldPay += oil_money;
+        shouldPay += keshi_money;
+        shouldPay += weekend_keshi_money;
+
         return shouldPay;
     }
 

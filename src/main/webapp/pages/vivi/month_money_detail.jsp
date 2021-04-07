@@ -80,6 +80,17 @@
         <d:column name="birth_day_money" prompt="生日" sortable="true" width="60"/>
 
         <d:column name="company_money" prompt="管理公司" sortable="true" width="80"/>
+
+        <d:column name="education_money" prompt="学历补贴" width="100"/>
+        <d:column name="education_background" prompt="教育补贴" width="100"/>
+        <d:column name="certificate" prompt="证书补贴" width="100"/>
+        <d:column name="education_certificate" prompt="教师证补贴" width="100"/>
+        <d:column name="low_age_class_money" prompt="小龄班级补贴" width="100"/>
+        <d:column name="oil_money" prompt="油费补贴" width="100"/>
+        <d:column name="keshi_money" prompt="课时补贴" width="100"/>
+        <d:column name="weekend_keshi_money" prompt="周末课补贴" width="100"/>
+
+
         <d:column name="should_pay" prompt="应发" sortable="true" width="60"/>
 
         <d:column name="shebao" prompt="社保" sortable="true"  width="60"/>

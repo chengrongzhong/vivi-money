@@ -89,6 +89,15 @@
         <d:column name="other" prompt="其他" editor="numberfield" width="100"/>
         <d:column name="sushe" prompt="宿舍" editor="numberfield" width="100"/>
         <d:column name="company_money" prompt="管理公司工资" editor="numberfield" width="100"/>
+        <d:column name="education_money" prompt="学历补贴" editor="numberfield" width="100"/>
+        <d:column name="education_background" prompt="教育补贴" editor="numberfield" width="100"/>
+        <d:column name="certificate" prompt="证书补贴" editor="numberfield" width="100"/>
+        <d:column name="education_certificate" prompt="教师证补贴" editor="numberfield" width="100"/>
+        <d:column name="low_age_class_money" prompt="小龄班级补贴" editor="numberfield" width="100"/>
+        <d:column name="oil_money" prompt="油费补贴" editor="numberfield" width="100"/>
+        <d:column name="keshi_money" prompt="课时补贴" editor="numberfield" width="100"/>
+        <d:column name="weekend_keshi_money" prompt="周末课补贴" editor="numberfield" width="100"/>
+
     </d:columns>
 </d:grid>
 </body>

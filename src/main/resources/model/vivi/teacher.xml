@@ -54,6 +54,15 @@
         <param name="state" dataType="number"/>
         <param name="company_money" dataType="number"/>
 
+        <param name="education_money" dataType="number"/>
+        <param name="education_background" dataType="number"/>
+        <param name="certificate" dataType="number"/>
+        <param name="education_certificate" dataType="number"/>
+        <param name="low_age_class_money" dataType="number"/>
+        <param name="oil_money" dataType="number"/>
+        <param name="keshi_money" dataType="number"/>
+        <param name="weekend_keshi_money" dataType="number"/>
+
         <sqls>
             <executeSql>
                 <![CDATA[
@@ -70,7 +79,16 @@
                 other,
                 sushe,
                 state,
-                company_money
+                company_money,
+
+                education_money,
+                education_background,
+                certificate,
+                education_certificate,
+                low_age_class_money,
+                oil_money,
+                keshi_money,
+                weekend_keshi_money
                 )
                 VALUES
                 (
@@ -85,7 +103,16 @@
                 ${@other},
                 ${@sushe},
                 ${@state},
-                ${@company_money}
+                ${@company_money},
+
+                ${@education_money},
+                ${@education_background},
+                ${@certificate},
+                ${@education_certificate},
+                ${@low_age_class_money},
+                ${@oil_money},
+                ${@keshi_money},
+                ${@weekend_keshi_money}
                 )
             ]]>
             </executeSql>
@@ -106,6 +133,16 @@
         <param name="company_money" dataType="number"/>
         <param name="sushe" dataType="number"/>
         <param name="state" dataType="number"/>
+
+        <param name="education_money" dataType="number"/>
+        <param name="education_background" dataType="number"/>
+        <param name="certificate" dataType="number"/>
+        <param name="education_certificate" dataType="number"/>
+        <param name="low_age_class_money" dataType="number"/>
+        <param name="oil_money" dataType="number"/>
+        <param name="keshi_money" dataType="number"/>
+        <param name="weekend_keshi_money" dataType="number"/>
+
         <sqls>
             <executeSql>
                 <![CDATA[
@@ -121,7 +158,17 @@
                 other=${@other},
                 sushe=${@sushe},
                 state=${@state},
-                company_money=${@company_money}
+                company_money=${@company_money},
+
+                education_money=${@education_money},
+                education_background=${@education_background},
+                certificate=${@certificate},
+                education_certificate=${@education_certificate},
+                low_age_class_money=${@low_age_class_money},
+                oil_money=${@oil_money},
+                keshi_money=${@keshi_money},
+                weekend_keshi_money=${@weekend_keshi_money}
+
                 WHERE id = ${@id}
             ]]>
             </executeSql>

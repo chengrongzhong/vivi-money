@@ -1,0 +1,10 @@
+server.servlet.jsp.init-parameters.development=true
+
+spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
+spring.jackson.time-zone=GMT+8
+
+dbfound.web.openSession=true
+dbfound.datasource.db0.url=jdbc:mysql://127.0.0.1:3306/vivi
+dbfound.datasource.db0.username=root
+dbfound.datasource.db0.password=root
+dbfound.datasource.db0.dialect=MySqlDialect
